@@ -35,7 +35,7 @@ const HeaderCarousel = () => {
         showArrows={false}
         autoPlay
         infiniteLoop
-        interval={4000}
+        interval={2000}
         showThumbs={false}
         showStatus={false}
         stopOnHover

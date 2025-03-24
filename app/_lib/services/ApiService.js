@@ -1,14 +1,15 @@
-"use client";
-import useAuthStore from "@/app/_store/useAuthStore";
-import axios from "axios";
+'use client';
+import useAuthStore from '@/app/_store/useAuthStore';
+import axios from 'axios';
+import ENDPOINTS from '../constants/constans';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: {
-    "Content-Type": "application/json",
-    "ngrok-skip-browser-warning": "true",
+    'Content-Type': 'application/json',
+    'ngrok-skip-browser-warning': 'true',
   },
   withCredentials: true,
   timeout: 10000, // 10 seconds
@@ -18,6 +19,7 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().accessToken; // Get latest token
+    console.log(token, useAuthStore.getState(), 22);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,11 +29,32 @@ apiClient.interceptors.request.use(
 );
 
 const handleApiError = (error) => {
-  console.error("API Error:", error);
-  const errorMessage = error.response?.data?.message || "Something went wrong!";
+  console.error('API Error:', error);
+  const errorMessage = error.response?.data?.message || 'Something went wrong!';
   throw new Error(errorMessage);
 };
+
 const ApiService = {
+  //user login
+  login: async (userData) => {
+    try {
+      const response = await apiClient.post(ENDPOINTS.USER.LOGIN, userData);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  //user registration
+  register: async (userData) => {
+    try {
+      const response = await apiClient.post(ENDPOINTS.AUTH.REGISTER, userData);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
   // Fetch event types
   fetchEventTypes: async () => {
     try {
@@ -53,7 +76,7 @@ const ApiService = {
 
   // Fetch events by type
   fetchEventsByType: async (eventId) => {
-    const apiUrl = ENDPOINTS.EVENT_TYPE.GET.replace("{typeId}", eventId);
+    const apiUrl = ENDPOINTS.EVENT_TYPE.GET.replace('{typeId}', eventId);
     try {
       const response = await apiClient.get(apiUrl);
       return response.data;
@@ -100,7 +123,7 @@ const ApiService = {
 
   // Fetch venues by location
   fetchVenuesByLocation: async (locationId) => {
-    const apiUrl = ENDPOINTS.VENUE.GET.replace("{locationId}", locationId);
+    const apiUrl = ENDPOINTS.VENUE.GET.replace('{locationId}', locationId);
     try {
       const response = await apiClient.get(apiUrl);
       return response.data;
@@ -121,7 +144,7 @@ const ApiService = {
 
   // Fetch sections by venue
   fetchSectionsByVenue: async (venueId) => {
-    const apiUrl = ENDPOINTS.SECTION.GET.replace("{venueId}", venueId);
+    const apiUrl = ENDPOINTS.SECTION.GET.replace('{venueId}', venueId);
     try {
       const response = await apiClient.get(apiUrl);
       return response.data;
@@ -145,11 +168,11 @@ const ApiService = {
 
   // Upload seats for a section
   uploadSeats: async (sectionId, seatData) => {
-    const apiUrl = ENDPOINTS.SEAT.UPLOAD_SEAT.replace("{sectionId}", sectionId);
+    const apiUrl = ENDPOINTS.SEAT.UPLOAD_SEAT.replace('{sectionId}', sectionId);
     try {
       const response = await apiClient.post(apiUrl, seatData, {
         headers: {
-          "Content-Type": "multipart/form-data",
+          'Content-Type': 'multipart/form-data',
         },
       });
       return response.data;
@@ -190,7 +213,7 @@ const ApiService = {
   getUserDetails: async (userId) => {
     try {
       const response = await apiClient.get(
-        ENDPOINTS.USER.GET.replace("{userId}", userId)
+        ENDPOINTS.USER.GET.replace('{userId}', userId)
       );
       return response.data;
     } catch (error) {
@@ -202,7 +225,7 @@ const ApiService = {
   fetchEventSessions: async (eventId) => {
     try {
       const response = await apiClient.get(
-        ENDPOINTS.SESSION.GET.replace("{eventId}", eventId)
+        ENDPOINTS.SESSION.GET.replace('{eventId}', eventId)
       );
       return response.data;
     } catch (error) {
@@ -214,7 +237,7 @@ const ApiService = {
   getSeats: async (sectionId) => {
     try {
       const response = await apiClient.get(
-        ENDPOINTS.SEAT.GET.replace("{sectionId}", sectionId)
+        ENDPOINTS.SEAT.GET.replace('{sectionId}', sectionId)
       );
       return response.data;
     } catch (error) {

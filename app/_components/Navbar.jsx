@@ -1,8 +1,13 @@
-import Link from "next/link";
-import React from "react";
-import { FaSearch } from "react-icons/fa";
-
+'use client';
+import Link from 'next/link';
+import React from 'react';
+import { FaSearch } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 const Navbar = () => {
+  const router = useRouter();
+  const pathname = usePathname();
+  if (pathname?.includes('/admin')) return <></>;
   return (
     <div className="fixed top-0 left-0 w-full bg-[#FDFAF6] shadow-md z-50">
       <div className="flex items-center justify-between p-4">
