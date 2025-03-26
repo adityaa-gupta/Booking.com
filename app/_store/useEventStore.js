@@ -1,6 +1,7 @@
 import { create } from 'zustand';
+import ApiService from '@/app/_lib/services/ApiService';
 
-const useEventStore = create((set) => ({
+const useEventStore = create((set, get) => ({
   events: [],
   eventTypes: [],
   locations: [],
@@ -16,6 +17,23 @@ const useEventStore = create((set) => ({
 
   // Set events
   setEvents: (events) => set({ events }),
+
+  // Fetch and refresh events by selected event type
+  fetchAndRefreshEvents: async () => {
+    try {
+      const selectedEventType = get().selectedEventType; // Access the current selectedEventType
+      if (!selectedEventType) {
+        console.error('No event type selected');
+        return;
+      }
+
+      const events = await ApiService.fetchEventsByType(selectedEventType);
+      set({ events });
+      console.log('Events refreshed:', events);
+    } catch (error) {
+      console.error('Failed to fetch events:', error.message);
+    }
+  },
 
   // Set event types
   setEventTypes: (eventTypes) => set({ eventTypes }),
@@ -44,7 +62,6 @@ const useEventStore = create((set) => ({
     set({ selectedEventTypeId: eventTypeId }),
 
   // Set selected event type name
-
   setSelectedEventTypeName: (eventTypeName) =>
     set({ selectedEventTypeName: eventTypeName }),
 }));

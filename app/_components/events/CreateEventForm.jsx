@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import InputField from '../InputField';
-import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaUpload } from 'react-icons/fa';
 
 const CreateEventForm = ({ onSubmit }) => {
   const {
@@ -13,7 +13,7 @@ const CreateEventForm = ({ onSubmit }) => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-4 bg-[#FAF1E6] p-6 rounded-lg shadow-md"
+      className="space-y-6 bg-[#FAF1E6] p-8 rounded-lg shadow-md"
     >
       <InputField
         label="Event Name"
@@ -31,7 +31,7 @@ const CreateEventForm = ({ onSubmit }) => {
       />
       <InputField
         label="Image"
-        icon={<FaLock />}
+        icon={<FaUpload />}
         placeholder="Upload image"
         type="file"
         {...register('image', { required: 'Image is required' })}
@@ -39,7 +39,7 @@ const CreateEventForm = ({ onSubmit }) => {
       />
       <button
         type="submit"
-        className="bg-[#1F7D53] text-white px-6 py-2 rounded-full font-semibold hover:bg-green-700 transition duration-200"
+        className="bg-[#1F7D53] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#145A3A] transition duration-200"
       >
         Submit
       </button>
