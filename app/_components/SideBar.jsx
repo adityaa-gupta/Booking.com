@@ -27,6 +27,12 @@ const SideBar = () => {
       icon: <FaChair />,
       selected: false,
     },
+    {
+      name: 'Sessions',
+      link: '/admin/session',
+      icon: <FaChair />,
+      selected: false,
+    },
   ];
 
   console.log(pathname);

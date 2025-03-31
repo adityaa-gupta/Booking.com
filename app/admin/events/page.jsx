@@ -152,14 +152,6 @@ const Page = () => {
           </button>
         </div>
       )}
-      <div className="mt-6 flex justify-end gap-4">
-        <button
-          onClick={handleNavigateToSection}
-          className="bg-[#1F7D53] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#145A3A] transition duration-200"
-        >
-          Select Section
-        </button>
-      </div>
     </div>
   );
 };

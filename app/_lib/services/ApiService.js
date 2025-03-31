@@ -166,6 +166,18 @@ const ApiService = {
     }
   },
 
+  //fetch section seats
+
+  fetchSectionSeats: async (sectionId) => {
+    const apiUrl = ENDPOINTS.SEAT.GET.replace('{sectionId}', sectionId);
+    try {
+      const response = await apiClient.get(apiUrl);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
   // Upload seats for a section
   uploadSeats: async (sectionId, seatData) => {
     const apiUrl = ENDPOINTS.SEAT.UPLOAD_SEAT.replace('{sectionId}', sectionId);

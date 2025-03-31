@@ -26,7 +26,7 @@ const ENDPOINTS = {
     POST: '/unifiedbookingsystem/v1/sections',
   },
   SEAT: {
-    GET: '/unifiedbookingsystem/v1/events/sessions/{sessionId}/available-seats',
+    GET: '/unifiedbookingsystem/v1/seats/sections/{sectionId}',
     UPLOAD_SEAT: '/unifiedbookingsystem/v1/seats/temp/sections/{sectionId}',
     VERIFY_SEAT: '/unifiedbookingsystem/v1/seats/verify',
     FINAL_UPLOAD: '/unifiedbookingsystem/v1/seats',

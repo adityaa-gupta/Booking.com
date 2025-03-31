@@ -95,7 +95,7 @@ const VenuePage = () => {
                       <input
                         type="radio"
                         name="selectedVenue"
-                        onChange={() => handleSelectVenue(venue.id)}
+                        onChange={() => handleSelectVenue(venue.venueId)}
                       />
                     </td>
                     <td className="border border-[#99BC85] px-6 py-4">

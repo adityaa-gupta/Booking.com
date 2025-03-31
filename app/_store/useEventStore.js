@@ -6,6 +6,7 @@ const useEventStore = create((set, get) => ({
   eventTypes: [],
   locations: [],
   venues: [],
+  sections: [],
   selectedEvent: null,
   selectedEventType: null,
   selectedLocation: null,
@@ -15,7 +16,8 @@ const useEventStore = create((set, get) => ({
   selectedEventTypeName: null,
   venueId: null,
   sectionId: null,
-  selectedVenueId: null, // Add selectedVenueId to the store
+  selectedVenueId: null,
+  selectedSectionId: null, // Add selectedSectionId to the store
 
   // Set venues
   setVenues: (venues) => set({ venues }),
@@ -39,6 +41,23 @@ const useEventStore = create((set, get) => ({
       console.error('Failed to fetch venues:', error.message);
     }
   },
+
+  // Set sections
+  setSections: (sections) => set({ sections }),
+
+  // Fetch sections by venue
+  fetchSectionsByVenue: async (venueId) => {
+    try {
+      const sections = await ApiService.fetchSectionsByVenue(venueId);
+      set({ sections });
+      console.log('Sections refreshed:', sections);
+    } catch (error) {
+      console.error('Failed to fetch sections:', error.message);
+    }
+  },
+
+  // Set selected section ID
+  setSelectedSectionId: (sectionId) => set({ selectedSectionId: sectionId }),
 
   // Set events
   setEvents: (events) => set({ events }),
