@@ -62,6 +62,18 @@ const useEventStore = create((set, get) => ({
   // Set events
   setEvents: (events) => set({ events }),
 
+  // Fetch all events and store them
+  fetchAllEvents: async () => {
+    try {
+      const response = await ApiService.fetchEvents();
+      const { content } = response; // Extract the content array
+      set({ events: content }); // Store only the content array in the events state
+      console.log('All events fetched:', content);
+    } catch (error) {
+      console.error('Failed to fetch events:', error.message);
+    }
+  },
+
   // Fetch and refresh events by selected event type
   fetchAndRefreshEvents: async () => {
     try {
@@ -78,6 +90,8 @@ const useEventStore = create((set, get) => ({
       console.error('Failed to fetch events:', error.message);
     }
   },
+
+  // fetch and refresh available events
 
   // Set event types
   setEventTypes: (eventTypes) => set({ eventTypes }),

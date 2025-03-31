@@ -4,6 +4,7 @@ import React from 'react';
 import { FaSearch } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+
 const Navbar = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -11,7 +12,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 w-full bg-[#FDFAF6] shadow-md z-50">
       <div className="flex items-center justify-between p-4">
-        <Link href="/" className="font-bold text-2xl text-[#99BC85]">
+        <Link href="/" className="font-bold text-3xl text-[#498526]">
           Booking.com
         </Link>
 
@@ -30,10 +31,18 @@ const Navbar = () => {
         {/* Navigation Links */}
         <div>
           <ul className="flex gap-10 font-semibold text-[#99BC85]">
-            <li className=" hover:text-black cursor-pointer">Home</li>
-            <li className=" hover:text-black cursor-pointer">About</li>
-            <li className=" hover:text-black cursor-pointer">Services</li>
-            <li className=" hover:text-black cursor-pointer">Contact</li>
+            <li className="hover:text-black cursor-pointer">
+              <Link href="/">Home</Link>
+            </li>
+            <li className="hover:text-black cursor-pointer">
+              <Link href="/about">About</Link>
+            </li>
+            <li className="hover:text-black cursor-pointer">
+              <Link href="/services">Services</Link>
+            </li>
+            <li className="hover:text-black cursor-pointer">
+              <Link href="/contact">Contact</Link>
+            </li>
           </ul>
         </div>
 

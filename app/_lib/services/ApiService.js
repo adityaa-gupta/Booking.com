@@ -12,7 +12,7 @@ const apiClient = axios.create({
     'ngrok-skip-browser-warning': 'true',
   },
   withCredentials: true,
-  timeout: 10000, // 10 seconds
+  // timeout: 10000, // 10 seconds
 });
 
 // **Attach an interceptor to dynamically add the latest token**
@@ -65,6 +65,7 @@ const ApiService = {
     }
   },
 
+  // Fetch all events
   fetchEvents: async () => {
     try {
       const response = await apiClient.get(ENDPOINTS.EVENTS.GET_ALL);
@@ -250,6 +251,18 @@ const ApiService = {
     try {
       const response = await apiClient.get(
         ENDPOINTS.SEAT.GET.replace('{sectionId}', sectionId)
+      );
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  // Fetch event by ID
+  fetchEventById: async (eventId) => {
+    try {
+      const response = await apiClient.get(
+        ENDPOINTS.EVENTS.GET_BY_ID.replace('{eventId}', eventId)
       );
       return response.data;
     } catch (error) {

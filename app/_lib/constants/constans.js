@@ -1,8 +1,9 @@
 const ENDPOINTS = {
   EVENTS: {
     GET: '/unifiedbookingsystem/v1/events/event-types',
-    GET_ALL: '/unifiedbookingsystem/v1/events/event-types',
+    GET_ALL: '/unifiedbookingsystem/v1/events',
     POST: '/unifiedbookingsystem/v1/events',
+    GET_BY_ID: '/unifiedbookingsystem/v1/events/{eventId}',
   },
   EVENT_TYPE: {
     GET: '/unifiedbookingsystem/v1/events/event-types/{typeId}',
