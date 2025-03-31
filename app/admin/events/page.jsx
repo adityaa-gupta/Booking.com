@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import DropDown from '@/app/_components/DropDown';
 import AddEvents from '@/app/_components/events/AddEvents';
 import { FaPencilRuler, FaTrash } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
 
 const Page = () => {
   const {
@@ -15,7 +16,9 @@ const Page = () => {
     fetchAndRefreshEvents,
     events,
     setSelectedEventId,
+    selectedEventId,
   } = useEventStore();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchEventTypes = async () => {
@@ -33,6 +36,18 @@ const Page = () => {
   const handleSelectEvent = (eventId) => {
     setSelectedEventId(eventId); // Set the selected event ID in the store
     console.log('Selected Event ID:', eventId);
+  };
+
+  const handleNavigateToVenue = () => {
+    router.push('/admin/venue');
+  };
+
+  const handleNavigateToSection = () => {
+    if (selectedEventId) {
+      router.push('/admin/section');
+    } else {
+      alert('Please select an event first.');
+    }
   };
 
   const eventTypeOptions = eventTypes.map((eventType) => ({
@@ -126,6 +141,24 @@ const Page = () => {
         ) : (
           <div className="text-[#443627]">No events available.</div>
         )}
+      </div>
+      {selectedEventId && (
+        <div className="mt-6 flex justify-end">
+          <button
+            onClick={handleNavigateToVenue}
+            className="bg-[#1F7D53] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#145A3A] transition duration-200"
+          >
+            Select Venue
+          </button>
+        </div>
+      )}
+      <div className="mt-6 flex justify-end gap-4">
+        <button
+          onClick={handleNavigateToSection}
+          className="bg-[#1F7D53] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#145A3A] transition duration-200"
+        >
+          Select Section
+        </button>
       </div>
     </div>
   );
