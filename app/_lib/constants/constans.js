@@ -28,6 +28,8 @@ const ENDPOINTS = {
   },
   SEAT: {
     GET: '/unifiedbookingsystem/v1/seats/sections/{sectionId}',
+    GET_AVL_SEAT:
+      '/unifiedbookingsystem/v1/sessions/{sessionId}/available-seats',
     UPLOAD_SEAT: '/unifiedbookingsystem/v1/seats/temp/sections/{sectionId}',
     VERIFY_SEAT: '/unifiedbookingsystem/v1/seats/verify',
     FINAL_UPLOAD: '/unifiedbookingsystem/v1/seats',
@@ -37,6 +39,10 @@ const ENDPOINTS = {
     POST: '/unifiedbookingsystem/v1/users',
     LOGIN: '/unifiedbookingsystem/v1/users/login',
     SIGNUP: '/unifiedbookingsystem/v1/users',
+  },
+  REVIEW: {
+    GET: '/unifiedbookingsystem/v1/ratings/{eventId}',
+    POST: '/unifiedbookingsystem/v1/reviews',
   },
 };
 

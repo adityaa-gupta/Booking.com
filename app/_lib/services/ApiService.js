@@ -250,7 +250,7 @@ const ApiService = {
   getSeats: async (sectionId) => {
     try {
       const response = await apiClient.get(
-        ENDPOINTS.SEAT.GET.replace('{sectionId}', sectionId)
+        ENDPOINTS.SEAT.GET_AVL_SEAT.replace('{sessionId}', sectionId)
       );
       return response.data;
     } catch (error) {
@@ -263,6 +263,18 @@ const ApiService = {
     try {
       const response = await apiClient.get(
         ENDPOINTS.EVENTS.GET_BY_ID.replace('{eventId}', eventId)
+      );
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  // Fetch reviews by event ID
+  fetchReviewsByEventId: async (eventId) => {
+    try {
+      const response = await apiClient.get(
+        ENDPOINTS.REVIEW.GET.replace('{eventId}', eventId)
       );
       return response.data;
     } catch (error) {
