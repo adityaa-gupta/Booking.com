@@ -336,7 +336,7 @@ export default function MyProfilePage() {
                             className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                           />
                         ) : (
-                          <div className="p-3 bg-gray-50 rounded-lg">
+                          <div className="p-3 bg-gray-50 text-amber-950 rounded-lg">
                             {profile.firstName || 'Not provided'}
                           </div>
                         )}
@@ -355,7 +355,7 @@ export default function MyProfilePage() {
                             className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                           />
                         ) : (
-                          <div className="p-3 bg-gray-50 rounded-lg">
+                          <div className="p-3 bg-gray-50 text-amber-950  rounded-lg">
                             {profile.lastName || 'Not provided'}
                           </div>
                         )}
@@ -384,7 +384,7 @@ export default function MyProfilePage() {
                           className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                         />
                       ) : (
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3 bg-gray-50 text-amber-950  rounded-lg">
                           {profile.phoneNumber || 'Not provided'}
                         </div>
                       )}
@@ -403,7 +403,7 @@ export default function MyProfilePage() {
                           className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                         />
                       ) : (
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3 text-amber-950  bg-gray-50 rounded-lg">
                           {profile.dateOfBirth || 'Not provided'}
                         </div>
                       )}
@@ -422,7 +422,7 @@ export default function MyProfilePage() {
                           className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                         />
                       ) : (
-                        <div className="p-3 bg-gray-50 rounded-lg">
+                        <div className="p-3 bg-gray-50 text-amber-950  rounded-lg">
                           {profile.address || 'Not provided'}
                         </div>
                       )}
@@ -451,45 +451,63 @@ export default function MyProfilePage() {
             </div>
 
             {/* Activity summary section */}
-            <div className="mt-6 bg-white rounded-xl shadow-md overflow-hidden">
-              <div className="bg-[#99BC85] p-4 text-white">
-                <h2 className="text-lg font-semibold">Recent Activity</h2>
+            <div className="mt-6 bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg">
+              <div className="bg-gradient-to-r from-[#99BC85] to-[#7da369] p-4 text-white">
+                <h2 className="text-lg font-semibold flex items-center gap-2">
+                  <FaCalendar className="text-white" /> Recent Activity
+                </h2>
               </div>
               <div className="p-4">
                 <div className="space-y-4">
-                  <div className="flex items-center gap-3 p-3 border-b border-gray-100">
-                    <div className="bg-blue-100 p-2 rounded-full text-blue-600">
-                      <FaUserCircle />
+                  <div className="flex items-center gap-4 p-4 border-b border-gray-100 hover:bg-[#f9fbf7] transition-colors duration-200 rounded-lg">
+                    <div className="bg-gradient-to-br from-blue-400 to-blue-600 p-3 rounded-full text-white shadow-md">
+                      <FaUserCircle className="text-xl" />
                     </div>
-                    <div>
-                      <p className="font-medium">Profile Updated</p>
-                      <p className="text-sm text-gray-500">2 days ago</p>
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800">
+                        Profile Updated
+                      </p>
+                      <p className="text-sm text-gray-500 flex items-center gap-1">
+                        <FaCalendar className="text-[#99BC85] text-xs" /> 2 days
+                        ago
+                      </p>
+                    </div>
+                    <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                  </div>
+
+                  <div className="flex items-center gap-4 p-4 border-b border-gray-100 hover:bg-[#f9fbf7] transition-colors duration-200 rounded-lg">
+                    <div className="bg-gradient-to-br from-green-400 to-green-600 p-3 rounded-full text-white shadow-md">
+                      <FaCalendar className="text-xl" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800">
+                        New Booking Created
+                      </p>
+                      <p className="text-sm text-gray-500 flex items-center gap-1">
+                        <FaCalendar className="text-[#99BC85] text-xs" /> 1 week
+                        ago
+                      </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 p-3 border-b border-gray-100">
-                    <div className="bg-green-100 p-2 rounded-full text-green-600">
-                      <FaCalendar />
+                  <div className="flex items-center gap-4 p-4 hover:bg-[#f9fbf7] transition-colors duration-200 rounded-lg">
+                    <div className="bg-gradient-to-br from-purple-400 to-purple-600 p-3 rounded-full text-white shadow-md">
+                      <FaEnvelope className="text-xl" />
                     </div>
-                    <div>
-                      <p className="font-medium">New Booking Created</p>
-                      <p className="text-sm text-gray-500">1 week ago</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3">
-                    <div className="bg-purple-100 p-2 rounded-full text-purple-600">
-                      <FaEnvelope />
-                    </div>
-                    <div>
-                      <p className="font-medium">Email Verified</p>
-                      <p className="text-sm text-gray-500">2 weeks ago</p>
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800">
+                        Email Verified
+                      </p>
+                      <p className="text-sm text-gray-500 flex items-center gap-1">
+                        <FaCalendar className="text-[#99BC85] text-xs" /> 2
+                        weeks ago
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                <div className="mt-4 text-center">
-                  <button className="text-[#498526] text-sm font-medium hover:underline">
+                <div className="mt-6 text-center">
+                  <button className="px-4 py-2 bg-gradient-to-r from-[#498526] to-[#5a9e30] text-white rounded-lg text-sm font-medium hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
                     View All Activity
                   </button>
                 </div>

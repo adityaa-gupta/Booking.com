@@ -36,6 +36,7 @@ const ENDPOINTS = {
   },
   USER: {
     GET: 'unifiedbookingsystem/v1/users/{userId}',
+    UPDATE: 'unifiedbookingsystem/v1/users/{userId}',
     POST: '/unifiedbookingsystem/v1/users',
     LOGIN: '/unifiedbookingsystem/v1/users/login',
     SIGNUP: '/unifiedbookingsystem/v1/users',
