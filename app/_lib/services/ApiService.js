@@ -18,8 +18,7 @@ const apiClient = axios.create({
 // **Attach an interceptor to dynamically add the latest token**
 apiClient.interceptors.request.use(
   (config) => {
-    const token = useAuthStore.getState().accessToken; // Get latest token
-    console.log(token, useAuthStore.getState(), 22);
+    const token = useAuthStore.getState().accessToken; //
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

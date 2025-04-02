@@ -4,7 +4,7 @@ import InputField from '../InputField';
 import ApiService from '@/app/_lib/services/ApiService';
 import { toast } from 'react-toastify';
 
-const CreateSessionForm = ({ sectionId, eventId }) => {
+const CreateSessionForm = ({ sectionId, eventId, onCloseModal }) => {
   const {
     register,
     handleSubmit,
@@ -20,12 +20,9 @@ const CreateSessionForm = ({ sectionId, eventId }) => {
         eventId,
       };
 
-      console.log(body);
-
-      toast.success('Session created successfully');
-
       const res = await ApiService.createSession(body);
-      console.log(res);
+      toast.success('Session created successfully');
+      if (onCloseModal) onCloseModal();
     } catch (error) {
       toast.error('Error creating session');
       console.error('Error creating session:', error.message);

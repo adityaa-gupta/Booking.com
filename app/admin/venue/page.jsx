@@ -35,7 +35,6 @@ const VenuePage = () => {
 
   const handleSelectVenue = (venueId) => {
     setSelectedVenueId(venueId); // Set the selected venue ID in the store
-    console.log('Selected Venue ID:', venueId);
   };
 
   const handleNavigateToSection = () => {

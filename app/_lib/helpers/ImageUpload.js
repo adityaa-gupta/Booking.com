@@ -20,8 +20,6 @@ const uploadImage = async (file) => {
       return { error: error.message };
     }
 
-    console.log('Upload Success:', data); // Debugging: Check upload response
-
     // Get public URL of the uploaded image
     const { data: publicURLData, error: publicURLError } = supabase.storage
       .from('USB')

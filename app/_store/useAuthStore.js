@@ -15,8 +15,7 @@ const useAuthStore = create((set) => ({
 
   // Set user after login
   login: (userData, token) => {
-    // const userData = jwtDecode(token); // Decode the token to get user details
-    console.log(userData, token, 12);
+    // const userData = jwtDecode(tok
     localStorage.setItem('user', JSON.stringify(userData));
     localStorage.setItem('accessToken', token);
     set({

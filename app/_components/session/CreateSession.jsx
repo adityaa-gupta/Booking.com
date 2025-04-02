@@ -13,7 +13,11 @@ function CreateSession({ sectionId, eventId }) {
           </Button>
         </Modal.Open>
         <Modal.Window name="session-form">
-          <CreateSessionForm sectionId={sectionId} eventId={eventId} />
+          <CreateSessionForm
+            sectionId={sectionId}
+            eventId={eventId}
+            onCloseModal={Modal.close}
+          />
         </Modal.Window>
       </Modal>
     </div>

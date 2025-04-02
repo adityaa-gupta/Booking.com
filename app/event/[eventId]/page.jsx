@@ -65,7 +65,7 @@ const EventDetailsPage = () => {
     const fetchReviews = async () => {
       try {
         const data = await ApiService.fetchReviewsByEventId(eventId);
-        console.log(data);
+
         setReviews(data);
       } catch (error) {
         console.error('Error fetching event reviews:', error.message);
@@ -79,7 +79,7 @@ const EventDetailsPage = () => {
     const fetchEventSeats = async () => {
       try {
         const data = await ApiService.getSeats(selectedSession);
-        console.log(data);
+
         setSeats(data);
       } catch (error) {
         console.error('Error fetching event seats:', error.message);
@@ -87,7 +87,6 @@ const EventDetailsPage = () => {
     };
     if (selectedSession) fetchEventSeats();
   }, [selectedSession]);
-  console.log(selectedSession);
 
   useEffect(() => {
     const fetchEventDetails = async () => {

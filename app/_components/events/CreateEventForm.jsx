@@ -36,7 +36,6 @@ const CreateEventForm = ({ onCloseModal }) => {
       }
       const { url: imageUrl } = eventImageUrl;
 
-      console.log('Uploaded Image URL:', imageUrl);
       const body = {
         eventName: data.name,
         eventDescription: data.description,

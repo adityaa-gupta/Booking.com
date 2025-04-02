@@ -35,7 +35,6 @@ const SideBar = () => {
     },
   ];
 
-  console.log(pathname);
   return (
     <div className="sidebar bg-[#FAF1E6] p-8 flex flex-col gap-4 justify-between h-screen shadow-lg">
       <div className="flex items-center flex-col gap-10">

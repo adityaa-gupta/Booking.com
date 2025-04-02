@@ -12,7 +12,6 @@ const UploadSeatsModal = ({ sectionId, onClose }) => {
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
   };
-  console.log(sectionId, 15);
   const handleUploadSeats = async () => {
     if (!file) {
       toast.error('Please select a file to upload.');

@@ -36,7 +36,6 @@ const useEventStore = create((set, get) => ({
 
       const venues = await ApiService.fetchVenuesByLocation(selectedLocationId);
       set({ venues });
-      console.log('Venues refreshed:', venues);
     } catch (error) {
       console.error('Failed to fetch venues:', error.message);
     }
@@ -50,7 +49,6 @@ const useEventStore = create((set, get) => ({
     try {
       const sections = await ApiService.fetchSectionsByVenue(venueId);
       set({ sections });
-      console.log('Sections refreshed:', sections);
     } catch (error) {
       console.error('Failed to fetch sections:', error.message);
     }
@@ -67,8 +65,7 @@ const useEventStore = create((set, get) => ({
     try {
       const response = await ApiService.fetchEvents();
       const { content } = response; // Extract the content array
-      set({ events: content }); // Store only the content array in the events state
-      console.log('All events fetched:', content);
+      set({ events: content }); // Store only the \
     } catch (error) {
       console.error('Failed to fetch events:', error.message);
     }
@@ -85,7 +82,6 @@ const useEventStore = create((set, get) => ({
 
       const events = await ApiService.fetchEventsByType(selectedEventType);
       set({ events });
-      console.log('Events refreshed:', events);
     } catch (error) {
       console.error('Failed to fetch events:', error.message);
     }

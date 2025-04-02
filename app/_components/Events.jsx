@@ -9,7 +9,6 @@ const Events = () => {
   useEffect(() => {
     fetchAllEvents(); // Fetch all events when the component mounts
   }, []);
-  console.log(events);
 
   return (
     <div className="p-8 bg-[#FDFAF6] min-h-screen">

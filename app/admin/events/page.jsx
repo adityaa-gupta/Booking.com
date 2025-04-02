@@ -34,8 +34,7 @@ const Page = () => {
   };
 
   const handleSelectEvent = (eventId) => {
-    setSelectedEventId(eventId); // Set the selected event ID in the store
-    console.log('Selected Event ID:', eventId);
+    setSelectedEventId(eventId); // Set the sel
   };
 
   const handleNavigateToVenue = () => {

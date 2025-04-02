@@ -21,16 +21,13 @@ const SectionPage = () => {
 
   const handleSelectSection = async (sectionId) => {
     setSelectedSectionId(sectionId); // Set the selected section ID in the store
-    console.log('Selected Section ID:', sectionId);
 
     try {
       const seats = await ApiService.fetchSectionSeats(sectionId); // Fetch seats for the selected section
       if (seats.length > 0) {
-        console.log('Seats exist in this section:', seats);
         setSelectedSectionHasSeats(true); // Mark that the section has seats
         router.push('/admin/session'); // Redirect to session page
       } else {
-        console.log('No seats found in this section.');
         setSelectedSectionHasSeats(false); // Mark that the section has no seats
       }
     } catch (error) {
