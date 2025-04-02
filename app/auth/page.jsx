@@ -33,6 +33,13 @@ const AuthPage = () => {
       if (isSignup) {
         // Sign Up
         console.log(data);
+        const token = await ApiService.register(data);
+        console.log(token);
+        const userDetails = jwtDecode(token);
+        console.log(userDetails, token);
+        const role = { userDetails };
+        // console.log(role)
+        login(userDetails, token); // Call login with the token
       } else {
         // Login
         const { token } = await ApiService.login(data);

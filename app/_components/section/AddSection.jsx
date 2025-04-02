@@ -37,7 +37,10 @@ function AddSection() {
           </Button>
         </Modal.Open>
         <Modal.Window name="section-form">
-          <CreateSectionForm onSubmit={handleCreateSection} />
+          <CreateSectionForm
+            onSubmit={handleCreateSection}
+            onCloseModal={Modal.close}
+          />
         </Modal.Window>
       </Modal>
     </div>

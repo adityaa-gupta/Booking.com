@@ -44,7 +44,7 @@ const SideBar = () => {
           className="flex items-center text-[#1F7D53] text-2xl space-x-2 logo"
         >
           <MdOutlineEventAvailable />
-          <span>Booking.com</span>
+          <span>Seatly</span>
         </Link>
 
         <div className="flex flex-col gap-2">

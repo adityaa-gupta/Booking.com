@@ -48,7 +48,7 @@ const ApiService = {
   //user registration
   register: async (userData) => {
     try {
-      const response = await apiClient.post(ENDPOINTS.AUTH.REGISTER, userData);
+      const response = await apiClient.post(ENDPOINTS.USER.POST, userData);
       return response.data;
     } catch (error) {
       handleApiError(error);

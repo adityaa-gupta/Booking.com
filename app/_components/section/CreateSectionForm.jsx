@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import InputField from '../InputField';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 
-const CreateSectionForm = ({ onSubmit }) => {
+const CreateSectionForm = ({ onSubmit, onCloseModal }) => {
   const {
     register,
     handleSubmit,
@@ -12,7 +12,10 @@ const CreateSectionForm = ({ onSubmit }) => {
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={() => {
+        handleSubmit(onSubmit);
+        onCloseModal();
+      }}
       className="space-y-6 bg-[#FAF1E6] p-8 rounded-lg shadow-md"
     >
       <InputField
