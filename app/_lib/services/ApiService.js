@@ -280,6 +280,64 @@ const ApiService = {
       handleApiError(error);
     }
   },
+
+  // User profile methods
+  getUserProfile: async ({ userId }) => {
+    try {
+      console.log('Fetching profile for user ID:', userId);
+      const response = await apiClient.get(
+        ENDPOINTS.USER.GET.replace('{userId}', userId)
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      handleApiError(error);
+    }
+  },
+
+  updateUserProfile: async (userData) => {
+    try {
+      console.log('Updating profile with data:', userData);
+      // Make sure the API request includes the profilePhoto URL
+      const response = await apiClient.put(
+        ENDPOINTS.USER.UPDATE.replace('{userId}', userData.userId),
+        {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          address: userData.address,
+          phoneNumber: userData.phoneNumber,
+          dateOfBirth: userData.dateOfBirth,
+          profilePhoto: userData.profilePhoto, // Include the profilePhoto URL
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error updating user profile:', error);
+      handleApiError(error);
+    }
+  },
+
+  // Booking methods
+  getUserBookings: async () => {
+    try {
+      const response = await apiClient.get('/api/bookings/user');
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  cancelBooking: async (bookingId) => {
+    try {
+      const response = await apiClient.put(
+        `/api/bookings/${bookingId}/cancel`,
+        {}
+      );
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
 };
 
 export default ApiService;
