@@ -34,23 +34,20 @@ const AuthPage = () => {
         // Sign Up
 
         const token = await ApiService.register(data);
-
-        const userDetails = jwtDecode(token);
-
-        const role = { userDetails };
-        // console.log(role)
-        login(userDetails, token); // Call login with the token
+        setIsSignup(false);
       } else {
         // Login
         const { token } = await ApiService.login(data);
         const userDetails = jwtDecode(token);
 
-        const role = { userDetails };
-        // console.log(role)
+        const { role } = userDetails;
+        console.log(role);
         login(userDetails, token); // Call login with the token
-        // if (role[0] === 'ROLE_ADMIN') {
-        router.push('/admin/events');
-        // }
+        if (role[0] === 'ROLE_ADMIN') {
+          router.push('/admin/events');
+        } else {
+          router.push('/');
+        }
       }
     } catch (error) {
       alert(error.message);
