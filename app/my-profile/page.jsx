@@ -21,7 +21,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default function MyProfilePage() {
-  const { isAuthenticated, user, updateUser } = useAuthStore();
+  const { isAuthenticated, user, updateUser, updateProfilePhoto } =
+    useAuthStore();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
 
@@ -102,7 +103,12 @@ export default function MyProfilePage() {
         return;
       }
 
+      // Update profile state locally
       setProfile((prev) => ({ ...prev, profilePhoto: result.url }));
+
+      // Use the dedicated method to update profile photo in the auth store
+      updateProfilePhoto(result.url);
+
       setMessage({
         text: 'Profile picture uploaded successfully!',
         type: 'success',
@@ -127,8 +133,13 @@ export default function MyProfilePage() {
       // Update the user in the auth store
       updateUser({
         name: `${updatedProfile.firstName} ${updatedProfile.lastName}`.trim(),
-        profilePhoto: profile.profilePhoto,
       });
+
+      // Ensure profile photo is properly updated in the auth store
+      if (profile.profilePhoto) {
+        updateProfilePhoto(profile.profilePhoto);
+      }
+      console.log(profile);
 
       setMessage({ text: 'Profile updated successfully!', type: 'success' });
       setIsEditing(false);

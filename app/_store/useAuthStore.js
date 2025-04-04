@@ -1,46 +1,55 @@
 import { create } from 'zustand';
-import { jwtDecode } from 'jwt-decode';
+import { persist } from 'zustand/middleware';
 
-const useAuthStore = create((set) => ({
-  user:
-    typeof window !== 'undefined'
-      ? JSON.parse(localStorage.getItem('user'))
-      : null, // Stores user details
-  accessToken:
-    typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null, // Stores the access token
-  isAuthenticated:
-    typeof window !== 'undefined'
-      ? !!localStorage.getItem('accessToken')
-      : false, // Tracks authentication status
+// Create a safer localStorage check
+const getLocalStorage = () => {
+  if (typeof window !== 'undefined') {
+    return window.localStorage;
+  }
+  return {
+    getItem: () => null,
+    setItem: () => null,
+    removeItem: () => null,
+  };
+};
 
-  // Set user after login
-  login: (userData, token) => {
-    // const userData = jwtDecode(tok
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('accessToken', token);
-    set({
-      user: userData,
-      accessToken: token,
-      isAuthenticated: true,
-    });
-  },
-
-  // Logout and clear the store
-  logout: () => {
-    localStorage.removeItem('user');
-    localStorage.removeItem('accessToken');
-    set({
+// Create store with persist middleware
+const useAuthStore = create(
+  persist(
+    (set) => ({
       user: null,
       accessToken: null,
       isAuthenticated: false,
-    });
-  },
 
-  // Update user details
-  updateUser: (updatedUser) =>
-    set((state) => ({
-      user: { ...state.user, ...updatedUser },
-    })),
-}));
+      // Set user after login
+      login: (userData, token) => {
+        set({
+          user: userData,
+          accessToken: token,
+          isAuthenticated: true,
+        });
+      },
+
+      // Logout and clear the store
+      logout: () => {
+        set({
+          user: null,
+          accessToken: null,
+          isAuthenticated: false,
+        });
+      },
+
+      // Update user details
+      updateUser: (updatedUser) =>
+        set((state) => ({
+          user: { ...state.user, ...updatedUser },
+        })),
+    }),
+    {
+      name: 'auth-storage', // unique name
+      getStorage: () => getLocalStorage(),
+    }
+  )
+);
 
 export default useAuthStore;

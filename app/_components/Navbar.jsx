@@ -56,6 +56,8 @@ const Navbar = () => {
     return user.email || 'User';
   };
 
+  console.log(user);
+
   return (
     <div className="fixed top-0 left-0 w-full bg-[#FDFAF6] shadow-md z-50">
       <div className="flex items-center justify-between p-4">

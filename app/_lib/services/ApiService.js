@@ -317,16 +317,73 @@ const ApiService = {
     }
   },
 
-  // Booking methods
-  getUserBookings: async () => {
+  //create booking
+
+  createBooking: async (bookingData) => {
+    console.log(bookingData);
     try {
-      const response = await apiClient.get('/api/bookings/user');
+      const response = await apiClient.post(
+        ENDPOINTS.SEAT.BOOK_SEAT,
+        bookingData
+      );
       return response.data;
     } catch (error) {
       handleApiError(error);
     }
   },
 
+  // Payment methods
+  makePayment: async (paymentData) => {
+    try {
+      const response = await apiClient.post(
+        ENDPOINTS.SEAT.PAYMENT,
+        paymentData
+      );
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  verifyPayment: async (razorpay_order_id, razorpay_payment_id) => {
+    console.log(razorpay_order_id, razorpay_payment_id);
+    try {
+      const response = await apiClient.post(
+        ENDPOINTS.SEAT.PAYMENT_VERIFY,
+        null,
+        {
+          params: {
+            razorpay_order_id,
+            razorpay_payment_id,
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  // Booking methods
+  getUserBookings: async () => {
+    try {
+      const response = await apiClient.get(ENDPOINTS.SEAT.USER_SEAT);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+
+  // post review
+
+  postReview: async (reviewData) => {
+    try {
+      const response = await apiClient.post(ENDPOINTS.REVIEW.POST, reviewData);
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
   cancelBooking: async (bookingId) => {
     try {
       const response = await apiClient.put(

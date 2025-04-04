@@ -1,5 +1,5 @@
 'use client';
-import React, { use, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import ApiService from '@/app/_lib/services/ApiService';
 import {
@@ -8,6 +8,8 @@ import {
   FaInfoCircle,
   FaTicketAlt,
   FaTheaterMasks,
+  FaRegStar,
+  FaTimesCircle,
 } from 'react-icons/fa';
 import {
   MdAccessTime,
@@ -16,7 +18,7 @@ import {
   MdLocationCity,
   MdSchedule,
 } from 'react-icons/md';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const EventDetailsPage = () => {
   const { eventId } = useParams();
@@ -27,6 +29,197 @@ const EventDetailsPage = () => {
   const [selectedSession, setSelectedSession] = useState(null);
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [reviews, setReviews] = useState([]);
+  const [paymentProcessing, setPaymentProcessing] = useState(false);
+
+  // Review modal states
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [rating, setRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [submitLoading, setSubmitLoading] = useState(false);
+
+  // Review Modal Component - Fixed implementation
+  const ReviewModal = () => {
+    // Prevent background scrolling when modal is open
+    useEffect(() => {
+      if (showReviewModal) {
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.style.overflow = 'auto';
+      }
+
+      // Cleanup function
+      return () => {
+        document.body.style.overflow = 'auto';
+      };
+    }, [showReviewModal]);
+
+    if (!showReviewModal) return null;
+
+    return (
+      <div
+        className="fixed inset-0 z-50 flex items-center justify-center"
+        onClick={(e) => {
+          e.preventDefault();
+          setShowReviewModal(false);
+        }}
+      >
+        {/* Semi-transparent backdrop */}
+        <div className="fixed inset-0 bg-black opacity-60 backdrop-blur-sm"></div>
+
+        {/* Modal content */}
+        <div
+          className="relative z-50 bg-white rounded-xl p-6 w-full max-w-md shadow-2xl transform transition-all"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="text-xl font-bold text-[#255F38]">Write a Review</h3>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowReviewModal(false);
+              }}
+              className="text-gray-500 hover:text-[#255F38] transition-colors"
+            >
+              <FaTimesCircle size={20} />
+            </button>
+          </div>
+
+          <div className="mb-6">
+            <p className="text-[#443627] mb-2">Rate your experience:</p>
+            <div className="flex gap-2 mb-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button
+                  key={star}
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setRating(star);
+                  }}
+                  onMouseEnter={() => setHoverRating(star)}
+                  onMouseLeave={() => setHoverRating(0)}
+                  className="transition-transform hover:scale-110"
+                >
+                  {star <= (hoverRating || rating) ? (
+                    <FaStar className="text-[#255F38] text-2xl" />
+                  ) : (
+                    <FaRegStar className="text-[#255F38] text-2xl" />
+                  )}
+                </button>
+              ))}
+            </div>
+            <p className="text-sm text-gray-500 mb-4">
+              {rating === 1 && 'Poor'}
+              {rating === 2 && 'Fair'}
+              {rating === 3 && 'Good'}
+              {rating === 4 && 'Very Good'}
+              {rating === 5 && 'Excellent'}
+              {rating === 0 && 'Select a rating'}
+            </p>
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="review" className="block text-[#443627] mb-2">
+              Your Review:
+            </label>
+            <textarea
+              id="review"
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+              placeholder="Share your experience with this event..."
+              className="w-full min-h-[100px] p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#255F38]/50 focus:border-[#255F38]"
+            />
+          </div>
+
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSubmitReview();
+            }}
+            disabled={submitLoading || rating === 0 || !reviewText.trim()}
+            className={`w-full py-3 rounded-lg font-medium text-white ${
+              submitLoading || rating === 0 || !reviewText.trim()
+                ? 'bg-gray-400'
+                : 'bg-gradient-to-r from-[#255F38] to-[#1D4D34]'
+            }`}
+          >
+            {submitLoading ? (
+              <div className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                Submitting...
+              </div>
+            ) : (
+              'Submit Review'
+            )}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  // Function to handle review submission
+  const handleSubmitReview = async () => {
+    if (rating === 0) {
+      alert('Please select a rating');
+      return;
+    }
+
+    if (!reviewText.trim()) {
+      alert('Please write a review');
+      return;
+    }
+
+    try {
+      setSubmitLoading(true);
+      const reviewData = {
+        eventId: parseInt(eventId),
+        score: rating,
+        review: reviewText,
+      };
+
+      const response = await ApiService.postReview(reviewData);
+
+      // Add the new review to the reviews list with default values if API doesn't return them
+      const newReview = {
+        id: response?.id || Date.now(), // Fallback to timestamp if no ID
+        username: 'You', // This would ideally come from user context
+        score: rating,
+        review: reviewText,
+        imageUrl: 'https://cdn-icons-png.flaticon.com/512/3177/3177440.png', // Default avatar
+      };
+
+      setReviews([newReview, ...reviews]);
+
+      // Reset form
+      setRating(0);
+      setReviewText('');
+      setShowReviewModal(false);
+      alert('Review submitted successfully!');
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Error submitting review. Please try again.');
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
+  // Function to load Razorpay script dynamically
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
 
   // Function to handle seat selection
   const handleSeatSelect = (seat) => {
@@ -36,6 +229,109 @@ const EventDetailsPage = () => {
       setSelectedSeats(selectedSeats.filter((s) => s.id !== seat.id));
     } else {
       setSelectedSeats([...selectedSeats, seat]);
+    }
+  };
+
+  // Function to handle checkout and payment
+  const handleCheckout = async (sessionId, selectedSeats) => {
+    if (selectedSeats.length === 0) {
+      alert('Please select at least one seat to proceed.');
+      return;
+    }
+
+    try {
+      setPaymentProcessing(true);
+      const bookSeats = selectedSeats.map((seat) => seat.id);
+      const bookingData = {
+        sessionId,
+        bookSeats,
+      };
+
+      // Create booking
+      const bookingResponse = await ApiService.createBooking(bookingData);
+      console.log('Booking created:', bookingResponse);
+
+      if (!bookingResponse) {
+        alert('Failed to create booking. Please try again.');
+        setPaymentProcessing(false);
+        return;
+      }
+
+      const { bookingId, totalAmount } = bookingResponse;
+
+      // Get payment order from server
+      const paymentData = {
+        bookingId,
+        totalAmountToPay: totalAmount,
+      };
+
+      const paymentResponse = await ApiService.makePayment(paymentData);
+      console.log('Payment order created:', paymentResponse);
+
+      // Load Razorpay script if not already loaded
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded) {
+        alert('Failed to load payment gateway. Please try again.');
+        setPaymentProcessing(false);
+        return;
+      }
+
+      // Initialize Razorpay payment
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: totalAmount * 100, // Amount in paisa
+        currency: 'INR',
+        name: ' Booking',
+        description: `Booking for ${event.eventName}`,
+        order_id: paymentResponse.orderId,
+        handler: async function (response) {
+          console.log('Payment successful:', response);
+
+          // Verify payment on your server
+          try {
+            const razorpay_order_id = response.razorpay_order_id;
+            const razorpay_payment_id = response.razorpay_payment_id;
+            console.log(response);
+            const verificationResponse = await ApiService.verifyPayment(
+              razorpay_order_id,
+              razorpay_payment_id
+            );
+
+            alert('Payment successful! Your booking is confirmed.');
+          } catch (error) {
+            console.error('Error verifying payment:', error);
+            alert('Error verifying payment. Please contact support.');
+          }
+
+          // Clear selected seats
+          setSelectedSeats([]);
+          setSelectedSession(null);
+          setSeats([]);
+          setPaymentProcessing(false);
+        },
+        prefill: {
+          name: 'Customer Name',
+          email: 'customer@example.com',
+          contact: '9999999999',
+        },
+        theme: {
+          color: '#255F38',
+        },
+        modal: {
+          ondismiss: function () {
+            console.log('Payment cancelled');
+            setPaymentProcessing(false);
+          },
+        },
+      };
+
+      // Open Razorpay payment form
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
+    } catch (error) {
+      console.error('Error processing payment:', error.message);
+      alert('Error processing payment. Please try again.');
+      setPaymentProcessing(false);
     }
   };
 
@@ -137,7 +433,7 @@ const EventDetailsPage = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-5 py-2 rounded-full"
           >
-            <FaStar className="text-[#255F38]" />
+            <FaStar className="text-[#f6c41d]" />
             <span className="text-white font-medium">
               {event.averageRating?.toFixed(1) || 'New'} Rating
             </span>
@@ -233,7 +529,7 @@ const EventDetailsPage = () => {
                         {selectedSeats.map((seat) => (
                           <span
                             key={seat.id}
-                            className="px-2 py-1 bg-white rounded-md text-sm"
+                            className="px-2 py-1 bg-white text-green-950 rounded-md text-sm"
                           >
                             {seat.number} (₹{seat.price})
                           </span>
@@ -248,9 +544,26 @@ const EventDetailsPage = () => {
                       <motion.button
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full mt-4 bg-gradient-to-r from-[#255F38] to-[#1D4D34] text-white py-2 rounded-md font-medium shadow-md"
+                        onClick={() => {
+                          handleCheckout(selectedSession, selectedSeats);
+                        }}
+                        disabled={
+                          selectedSeats.length === 0 || paymentProcessing
+                        }
+                        className={`w-full mt-4 ${
+                          paymentProcessing
+                            ? 'bg-gray-400'
+                            : 'bg-gradient-to-r from-[#255F38] to-[#1D4D34]'
+                        } text-white py-2 rounded-md font-medium shadow-md flex items-center justify-center`}
                       >
-                        Proceed to Checkout
+                        {paymentProcessing ? (
+                          <>
+                            <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                            Processing...
+                          </>
+                        ) : (
+                          'Proceed to Payment'
+                        )}
                       </motion.button>
                     </>
                   ) : (
@@ -482,13 +795,31 @@ const EventDetailsPage = () => {
               <p className="text-[#443627] mb-6">
                 Be the first to share your experience!
               </p>
-              <button className="px-6 py-2 bg-[#255F38] text-white rounded-full font-medium hover:bg-[#1D4D34] transition-colors">
+              <button
+                onClick={() => setShowReviewModal(true)}
+                className="px-6 py-2 bg-[#255F38] text-white rounded-full font-medium hover:bg-[#1D4D34] transition-colors"
+              >
                 Write a Review
               </button>
             </motion.div>
           )}
+
+          {/* Add a "Write a Review" button if reviews exist */}
+          {reviews && reviews.length > 0 && (
+            <div className="mt-8 text-center">
+              <button
+                onClick={() => setShowReviewModal(true)}
+                className="px-6 py-2 bg-[#255F38] text-white rounded-full font-medium hover:bg-[#1D4D34] transition-colors"
+              >
+                Write Your Review
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
+
+      {/* Review Modal */}
+      <ReviewModal />
     </div>
   );
 };
