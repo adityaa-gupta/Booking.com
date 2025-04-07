@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import ApiService from '@/app/_lib/services/ApiService';
 import {
   FaStar,
@@ -19,9 +19,14 @@ import {
   MdSchedule,
 } from 'react-icons/md';
 import { motion, AnimatePresence } from 'framer-motion';
+import useAuthStore from '@/app/_store/useAuthStore';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EventDetailsPage = () => {
   const { eventId } = useParams();
+  const router = useRouter();
+  const { user, isAuthenticated } = useAuthStore();
   const [event, setEvent] = useState(null);
   const [sessions, setSessions] = useState([]);
   const [seats, setSeats] = useState([]);
@@ -162,13 +167,19 @@ const EventDetailsPage = () => {
 
   // Function to handle review submission
   const handleSubmitReview = async () => {
+    if (!isAuthenticated) {
+      const redirectUrl = encodeURIComponent(`/event/${eventId}`);
+      router.push(`/auth?redirect=${redirectUrl}`);
+      return;
+    }
+
     if (rating === 0) {
-      alert('Please select a rating');
+      toast.warning('Please select a rating');
       return;
     }
 
     if (!reviewText.trim()) {
-      alert('Please write a review');
+      toast.warning('Please write a review');
       return;
     }
 
@@ -182,13 +193,15 @@ const EventDetailsPage = () => {
 
       const response = await ApiService.postReview(reviewData);
 
-      // Add the new review to the reviews list with default values if API doesn't return them
+      // Add the new review to the reviews list with user data from auth store
       const newReview = {
-        id: response?.id || Date.now(), // Fallback to timestamp if no ID
-        username: 'You', // This would ideally come from user context
+        id: response?.id || Date.now(),
+        username: user?.firstName || 'You',
         score: rating,
         review: reviewText,
-        imageUrl: 'https://cdn-icons-png.flaticon.com/512/3177/3177440.png', // Default avatar
+        imageUrl:
+          user?.imageUrl ||
+          'https://cdn-icons-png.flaticon.com/512/3177/3177440.png',
       };
 
       setReviews([newReview, ...reviews]);
@@ -197,10 +210,10 @@ const EventDetailsPage = () => {
       setRating(0);
       setReviewText('');
       setShowReviewModal(false);
-      alert('Review submitted successfully!');
+      toast.success('Review submitted successfully!');
     } catch (error) {
       console.error('Error submitting review:', error);
-      alert('Error submitting review. Please try again.');
+      toast.error('Error submitting review. Please try again.');
     } finally {
       setSubmitLoading(false);
     }
@@ -234,8 +247,14 @@ const EventDetailsPage = () => {
 
   // Function to handle checkout and payment
   const handleCheckout = async (sessionId, selectedSeats) => {
+    if (!isAuthenticated) {
+      const redirectUrl = encodeURIComponent(`/event/${eventId}`);
+      router.push(`/auth?redirect=${redirectUrl}`);
+      return;
+    }
+
     if (selectedSeats.length === 0) {
-      alert('Please select at least one seat to proceed.');
+      toast.warning('Please select at least one seat to proceed.');
       return;
     }
 
@@ -252,7 +271,7 @@ const EventDetailsPage = () => {
       console.log('Booking created:', bookingResponse);
 
       if (!bookingResponse) {
-        alert('Failed to create booking. Please try again.');
+        toast.error('Failed to create booking. Please try again.');
         setPaymentProcessing(false);
         return;
       }
@@ -271,7 +290,7 @@ const EventDetailsPage = () => {
       // Load Razorpay script if not already loaded
       const isLoaded = await loadRazorpayScript();
       if (!isLoaded) {
-        alert('Failed to load payment gateway. Please try again.');
+        toast.error('Failed to load payment gateway. Please try again.');
         setPaymentProcessing(false);
         return;
       }
@@ -283,13 +302,13 @@ const EventDetailsPage = () => {
         currency: 'INR',
         name: ' Booking',
         description: `Booking for ${event.eventName}`,
-        order_id: paymentResponse.orderId,
+        order_id: paymentResponse.razorpay_order_id,
         handler: async function (response) {
-          console.log('Payment successful:', response);
+          console.log('Payment successful:', response, paymentResponse);
 
           // Verify payment on your server
           try {
-            const razorpay_order_id = response.razorpay_order_id;
+            const razorpay_order_id = paymentResponse.razorpay_order_id;
             const razorpay_payment_id = response.razorpay_payment_id;
             console.log(response);
             const verificationResponse = await ApiService.verifyPayment(
@@ -297,10 +316,10 @@ const EventDetailsPage = () => {
               razorpay_payment_id
             );
 
-            alert('Payment successful! Your booking is confirmed.');
+            toast.success('Payment successful! Your booking is confirmed.');
           } catch (error) {
             console.error('Error verifying payment:', error);
-            alert('Error verifying payment. Please contact support.');
+            toast.error('Error verifying payment. Please contact support.');
           }
 
           // Clear selected seats
@@ -310,9 +329,9 @@ const EventDetailsPage = () => {
           setPaymentProcessing(false);
         },
         prefill: {
-          name: 'Customer Name',
-          email: 'customer@example.com',
-          contact: '9999999999',
+          name: user?.firstName + ' ' + user?.lastName || 'Customer Name',
+          email: user?.email || 'customer@example.com',
+          contact: user?.phone || '9999999999',
         },
         theme: {
           color: '#255F38',
@@ -330,7 +349,7 @@ const EventDetailsPage = () => {
       razorpay.open();
     } catch (error) {
       console.error('Error processing payment:', error.message);
-      alert('Error processing payment. Please try again.');
+      toast.error('Error processing payment. Please try again.');
       setPaymentProcessing(false);
     }
   };
@@ -411,6 +430,20 @@ const EventDetailsPage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-[#f0f9eb] to-[#FDFAF6]">
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
       {/* Hero Section */}
       <div className="relative h-[65vh] w-full overflow-hidden">
         <img
@@ -796,7 +829,14 @@ const EventDetailsPage = () => {
                 Be the first to share your experience!
               </p>
               <button
-                onClick={() => setShowReviewModal(true)}
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    const redirectUrl = encodeURIComponent(`/event/${eventId}`);
+                    router.push(`/auth?redirect=${redirectUrl}`);
+                  } else {
+                    setShowReviewModal(true);
+                  }
+                }}
                 className="px-6 py-2 bg-[#255F38] text-white rounded-full font-medium hover:bg-[#1D4D34] transition-colors"
               >
                 Write a Review
@@ -808,7 +848,14 @@ const EventDetailsPage = () => {
           {reviews && reviews.length > 0 && (
             <div className="mt-8 text-center">
               <button
-                onClick={() => setShowReviewModal(true)}
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    const redirectUrl = encodeURIComponent(`/event/${eventId}`);
+                    router.push(`/auth?redirect=${redirectUrl}`);
+                  } else {
+                    setShowReviewModal(true);
+                  }
+                }}
                 className="px-6 py-2 bg-[#255F38] text-white rounded-full font-medium hover:bg-[#1D4D34] transition-colors"
               >
                 Write Your Review

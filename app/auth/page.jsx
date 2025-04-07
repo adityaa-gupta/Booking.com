@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import {
@@ -13,14 +13,28 @@ import {
 import InputField from '../_components/InputField';
 import useAuthStore from '../_store/useAuthStore';
 import ApiService from '../_lib/services/ApiService';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 
 const AuthPage = () => {
   const [isSignup, setIsSignup] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login } = useAuthStore();
+  const { login, isAuthenticated } = useAuthStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get('redirect');
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (redirectUrl) {
+        router.push(decodeURIComponent(redirectUrl));
+      } else {
+        router.push('/');
+      }
+    }
+  }, [isAuthenticated, redirectUrl, router]);
+
   const {
     register,
     handleSubmit,
@@ -32,7 +46,6 @@ const AuthPage = () => {
     try {
       if (isSignup) {
         // Sign Up
-
         const token = await ApiService.register(data);
         setIsSignup(false);
       } else {
@@ -41,10 +54,12 @@ const AuthPage = () => {
         const userDetails = jwtDecode(token);
 
         const { role } = userDetails;
-        console.log(role);
         login(userDetails, token); // Call login with the token
+
         if (role[0] === 'ROLE_ADMIN') {
           router.push('/admin/events');
+        } else if (redirectUrl) {
+          router.push(decodeURIComponent(redirectUrl));
         } else {
           router.push('/');
         }
