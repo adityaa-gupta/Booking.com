@@ -65,9 +65,12 @@ const ApiService = {
   },
 
   // Fetch all events
-  fetchEvents: async () => {
+  fetchEvents: async (eventName) => {
+    const params = eventName ? { eventName } : {};
     try {
-      const response = await apiClient.get(ENDPOINTS.EVENTS.GET_ALL);
+      const response = await apiClient.get(ENDPOINTS.EVENTS.GET_ALL, {
+        params,
+      });
       return response.data;
     } catch (error) {
       handleApiError(error);

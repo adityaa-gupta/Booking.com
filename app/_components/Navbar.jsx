@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
 import useAuthStore from '../_store/useAuthStore';
 import Image from 'next/image';
+import SearchComp from './SearchComp';
 
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -69,17 +70,7 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar - Hidden on mobile, visible on larger screens */}
-        <div className="hidden md:flex items-center border border-[#255F38] rounded-full overflow-hidden shadow-sm">
-          <input
-            type="text"
-            className="px-4 py-2 w-48 lg:w-80 text-[#255F38] border-none outline-none"
-            placeholder="Search for places, hotels..."
-          />
-          <button className="p-2 px-4">
-            <FaSearch size={18} className="text-[#99BC85]" />
-          </button>
-        </div>
-
+        <SearchComp />
         {/* Mobile Search Icon */}
         <button className="md:hidden p-2 text-[#498526] z-20">
           <FaSearch size={20} />

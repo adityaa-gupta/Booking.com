@@ -3,6 +3,7 @@ import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
+import toast, { Toaster } from 'react-hot-toast';
 import {
   FaUser,
   FaLock,
@@ -47,6 +48,7 @@ const AuthPage = () => {
       if (isSignup) {
         // Sign Up
         const token = await ApiService.register(data);
+        toast.success('Account created successfully!');
         setIsSignup(false);
       } else {
         // Login
@@ -55,6 +57,7 @@ const AuthPage = () => {
 
         const { role } = userDetails;
         login(userDetails, token); // Call login with the token
+        toast.success('Login successful!');
 
         if (role[0] === 'ROLE_ADMIN') {
           router.push('/admin/events');
@@ -65,7 +68,7 @@ const AuthPage = () => {
         }
       }
     } catch (error) {
-      alert(error.message);
+      toast.error(error.message || 'An error occurred');
     } finally {
       setLoading(false);
     }
@@ -73,6 +76,7 @@ const AuthPage = () => {
 
   return (
     <div className="flex items-center justify-center bg-[#E4EFE7]">
+      <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
       <div className="relative w-full  bg-[#FDFAF6] h-[100vh] shadow-lg rounded-lg overflow-hidden flex">
         {/* Animated Left Section */}
         <motion.div
