@@ -44,6 +44,9 @@ const ENDPOINTS = {
     POST: '/unifiedbookingsystem/v1/users',
     LOGIN: '/unifiedbookingsystem/v1/users/login',
     SIGNUP: '/unifiedbookingsystem/v1/users',
+    FORGOT_PASSWORD: '/unifiedbookingsystem/v1/users/forgot-password',
+    RESET_PASSWORD: '/unifiedbookingsystem/v1/users/reset-password',
+    O_AUTH: '/unifiedbookingsystem/v1/oauth',
   },
   REVIEW: {
     GET: '/unifiedbookingsystem/v1/ratings/{eventId}',

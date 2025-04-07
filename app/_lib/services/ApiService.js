@@ -398,6 +398,42 @@ const ApiService = {
       handleApiError(error);
     }
   },
+
+  //forgot password
+  forgotPassword: async (email) => {
+    try {
+      const response = await apiClient.post(ENDPOINTS.USER.FORGOT_PASSWORD, {
+        email,
+      });
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+  //reset password
+  resetPassword: async (passwordData) => {
+    try {
+      const response = await apiClient.post(
+        ENDPOINTS.USER.RESET_PASSWORD,
+        passwordData
+      );
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
+  // Google OAuth
+  googleOAuth: async (token) => {
+    const params = { token };
+    try {
+      const response = await apiClient.post(ENDPOINTS.USER.O_AUTH, null, {
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      handleApiError(error);
+    }
+  },
 };
 
 export default ApiService;
