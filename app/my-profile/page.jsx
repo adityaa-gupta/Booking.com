@@ -344,7 +344,7 @@ export default function MyProfilePage() {
                             name="firstName"
                             value={profile.firstName}
                             onChange={handleChange}
-                            className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
+                            className="border border-gray-300 text-green-900 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                           />
                         ) : (
                           <div className="p-3 bg-gray-50 text-amber-950 rounded-lg">
@@ -363,7 +363,7 @@ export default function MyProfilePage() {
                             name="lastName"
                             value={profile.lastName}
                             onChange={handleChange}
-                            className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
+                            className="border border-gray-300 text-green-900 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                           />
                         ) : (
                           <div className="p-3 bg-gray-50 text-amber-950  rounded-lg">
@@ -392,7 +392,7 @@ export default function MyProfilePage() {
                           name="phoneNumber"
                           value={profile.phoneNumber}
                           onChange={handleChange}
-                          className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
+                          className="border border-gray-300 p-3 text-green-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                         />
                       ) : (
                         <div className="p-3 bg-gray-50 text-amber-950  rounded-lg">
@@ -411,7 +411,7 @@ export default function MyProfilePage() {
                           name="dateOfBirth"
                           value={profile.dateOfBirth}
                           onChange={handleChange}
-                          className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
+                          className="border border-gray-300 text-green-900 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                         />
                       ) : (
                         <div className="p-3 text-amber-950  bg-gray-50 rounded-lg">
@@ -430,7 +430,7 @@ export default function MyProfilePage() {
                           value={profile.address}
                           onChange={handleChange}
                           rows="3"
-                          className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
+                          className="border border-gray-300 text-green-900 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#99BC85] focus:border-transparent"
                         />
                       ) : (
                         <div className="p-3 bg-gray-50 text-amber-950  rounded-lg">

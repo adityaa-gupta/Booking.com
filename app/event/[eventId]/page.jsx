@@ -745,7 +745,6 @@ const EventDetailsPage = () => {
             <FaStar className="text-[#255F38]" />
             What People Say
           </h2>
-
           {reviews && reviews.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {reviews.map((review, index) => (
@@ -843,8 +842,7 @@ const EventDetailsPage = () => {
               </button>
             </motion.div>
           )}
-
-          {/* Add a "Write a Review" button if reviews exist */}
+          {/* Add a "Write a Review" button if reviews exist
           {reviews && reviews.length > 0 && (
             <div className="mt-8 text-center">
               <button
@@ -861,7 +859,7 @@ const EventDetailsPage = () => {
                 Write Your Review
               </button>
             </div>
-          )}
+          )} */}
         </motion.div>
       </div>
 

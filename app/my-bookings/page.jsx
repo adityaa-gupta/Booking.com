@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useAuthStore from '../_store/useAuthStore';
 import ApiService from '../_lib/services/ApiService';
+import ReviewModal from '../_components/ReviewModal';
 import {
   FaCalendarAlt,
   FaUsers,
@@ -57,7 +58,11 @@ export default function MyBookingsPage() {
   const [message, setMessage] = useState({ text: '', type: 'info' });
   const [cancellingId, setCancellingId] = useState(null);
   const [bookingFilter, setBookingFilter] = useState('all'); // 'all', 'upcoming', 'past', 'cancelled'
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
+  console.log(user);
   useEffect(() => {
     setMounted(true);
 
@@ -109,6 +114,34 @@ export default function MyBookingsPage() {
       setMessage({ text: 'Failed to cancel booking', type: 'error' });
     } finally {
       setCancellingId(null);
+    }
+  };
+
+  const handleOpenReviewModal = (booking) => {
+    setSelectedBooking(booking);
+    setIsReviewModalOpen(true);
+  };
+
+  const handleCloseReviewModal = () => {
+    setIsReviewModalOpen(false);
+    setSelectedBooking(null);
+  };
+
+  const handleSubmitReview = async ({ rating, reviewText }) => {
+    try {
+      setSubmitLoading(true);
+      const reviewData = {
+        eventId: parseInt(selectedBooking?.eventId),
+        score: rating,
+        review: reviewText,
+      };
+      await ApiService.postReview(reviewData);
+      setMessage({ text: 'Review submitted successfully', type: 'success' });
+    } catch (error) {
+      setMessage({ text: 'Failed to submit review', type: 'error' });
+    } finally {
+      setSubmitLoading(false);
+      handleCloseReviewModal();
     }
   };
 
@@ -185,9 +218,21 @@ export default function MyBookingsPage() {
           <div className="w-full md:w-1/4">
             <div className="bg-white rounded-xl shadow-md p-6 mb-6">
               <div className="flex flex-col items-center">
-                <div className="bg-[#EBF5E0] p-5 rounded-full mb-4">
-                  <FaUserCircle className="text-[#498526] w-16 h-16" />
+                <div className="bg-[#EBF5E0] w-24 h-24 rounded-full flex items-center justify-center overflow-hidden">
+                  {user?.profilePhoto ? (
+                    <Image
+                      src={user?.profilePhoto}
+                      // alt={fullName}
+                      width={96}
+                      height={96}
+                      className="object-cover w-full h-full"
+                      priority
+                    />
+                  ) : (
+                    <FaUserCircle className="text-[#498526] w-16 h-16" />
+                  )}
                 </div>
+
                 <h2 className="text-xl font-bold text-[#255F38] mb-1">
                   My Account
                 </h2>
@@ -510,6 +555,18 @@ export default function MyBookingsPage() {
                                     </button>
                                   )}
 
+                                {new Date(booking.endTime) < new Date() &&
+                                  booking.status !== 'cancelled' && (
+                                    <button
+                                      onClick={() =>
+                                        handleOpenReviewModal(booking)
+                                      }
+                                      className="px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-lg hover:from-blue-600 hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-2"
+                                    >
+                                      <span>Write Review</span>
+                                    </button>
+                                  )}
+
                                 <Link
                                   href={`/event/${booking.eventId}`}
                                   className="px-5 py-2.5 bg-gradient-to-r from-[#99BC85] to-[#498526] text-white rounded-lg hover:from-[#7da369] hover:to-[#3B6B1E] transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-2"
@@ -539,6 +596,12 @@ export default function MyBookingsPage() {
           </div>
         </div>
       </div>
+      <ReviewModal
+        isOpen={isReviewModalOpen}
+        onClose={handleCloseReviewModal}
+        onSubmit={handleSubmitReview}
+        submitLoading={submitLoading}
+      />
     </div>
   );
 }

@@ -123,7 +123,7 @@ const Navbar = () => {
               >
                 {user.profilePhoto ? (
                   <div className="w-8 h-8 rounded-full overflow-hidden">
-                    <Image
+                    <img
                       src={user.profilePhoto}
                       alt={getUserDisplayName()}
                       width={32}

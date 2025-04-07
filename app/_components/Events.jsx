@@ -15,9 +15,9 @@ function EventsList() {
 
   // Map of event type IDs to their display names
   const eventTypeNames = {
-    1: 'Concerts',
+    3: 'Concerts',
     2: 'Movies',
-    3: 'Events',
+    1: 'Events',
   };
 
   useEffect(() => {

@@ -44,6 +44,12 @@ const useAuthStore = create(
         set((state) => ({
           user: { ...state.user, ...updatedUser },
         })),
+
+      // Update profile photo
+      updateProfilePhoto: (profilePhoto) =>
+        set((state) => ({
+          user: { ...state.user, profilePhoto },
+        })),
     }),
     {
       name: 'auth-storage', // unique name

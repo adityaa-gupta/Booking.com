@@ -177,9 +177,10 @@ const AuthPage = () => {
                 type="password"
                 {...register('password', {
                   required: 'Password is required',
-                  minLength: {
-                    value: 6,
-                    message: 'Password must be at least 6 characters',
+                  pattern: {
+                    value: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/,
+                    message:
+                      'Password must be at least 8 characters, include one capital letter and one special character',
                   },
                 })}
                 error={errors.password?.message}
