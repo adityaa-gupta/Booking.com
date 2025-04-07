@@ -11,6 +11,7 @@ import SearchComp from './SearchComp';
 const Navbar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSearchActive, setMobileSearchActive] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { isAuthenticated, user, logout } = useAuthStore();
   const router = useRouter();
@@ -24,6 +25,7 @@ const Navbar = () => {
   // Close mobile menu when route changes
   useEffect(() => {
     setMobileMenuOpen(false);
+    setMobileSearchActive(false);
   }, [pathname]);
 
   // Don't render navbar on admin pages
@@ -57,7 +59,17 @@ const Navbar = () => {
     return user.email || 'User';
   };
 
-  console.log(user);
+  const toggleMobileSearch = () => {
+    setMobileSearchActive(!mobileSearchActive);
+    if (!mobileMenuOpen) {
+      setMobileMenuOpen(true);
+    }
+  };
+
+  const handleSearchResultClick = () => {
+    setMobileMenuOpen(false);
+    setMobileSearchActive(false);
+  };
 
   return (
     <div className="fixed top-0 left-0 w-full bg-[#FDFAF6] shadow-md z-50">
@@ -70,9 +82,16 @@ const Navbar = () => {
         </Link>
 
         {/* Search Bar - Hidden on mobile, visible on larger screens */}
-        <SearchComp />
+        <div className="hidden md:block">
+          <SearchComp />
+        </div>
+
         {/* Mobile Search Icon */}
-        <button className="md:hidden p-2 text-[#498526] z-20">
+        <button
+          className="md:hidden p-2 text-[#498526] z-20"
+          onClick={toggleMobileSearch}
+          aria-label="Search"
+        >
           <FaSearch size={20} />
         </button>
 
@@ -158,7 +177,12 @@ const Navbar = () => {
         {/* Hamburger Menu Button */}
         <button
           className="md:hidden z-20 text-[#498526]"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          onClick={() => {
+            setMobileMenuOpen(!mobileMenuOpen);
+            if (mobileMenuOpen) {
+              setMobileSearchActive(false);
+            }
+          }}
         >
           {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
         </button>
@@ -168,41 +192,48 @@ const Navbar = () => {
           className={`fixed inset-0 bg-black bg-opacity-50 z-10 transition-opacity duration-300 ${
             mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
-          onClick={() => setMobileMenuOpen(false)}
+          onClick={() => {
+            setMobileMenuOpen(false);
+            setMobileSearchActive(false);
+          }}
         ></div>
 
         {/* Mobile Menu */}
         <div
-          className={`fixed top-0 right-0 w-3/4 h-full bg-white z-10 shadow-xl transform transition-transform duration-300 ease-in-out ${
+          className={`fixed top-0 right-0 w-3/4 h-full bg-white z-10 shadow-xl transform transition-transform duration-300 ease-in-out overflow-y-auto ${
             mobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
           }`}
         >
-          <div className="flex flex-col h-full pt-20 px-6">
+          <div className="flex flex-col h-full pt-20 px-4">
             {/* Mobile Search */}
-            <div className="mb-6 flex items-center border border-[#255F38] rounded-full overflow-hidden shadow-sm">
-              <input
-                type="text"
-                className="px-4 py-2 w-full text-[#255F38] border-none outline-none"
-                placeholder="Search..."
+            <div className="mb-4">
+              <SearchComp
+                isMobile={true}
+                onResultClick={handleSearchResultClick}
               />
-              <button className="p-2 px-4">
-                <FaSearch size={18} className="text-[#99BC85]" />
-              </button>
             </div>
 
             {/* Mobile Navigation Links */}
-            <ul className="flex flex-col gap-5 font-semibold text-[#99BC85]">
+            <ul className="flex flex-col gap-3 font-semibold text-[#99BC85] mt-2">
               <li className="hover:text-black cursor-pointer p-2 border-b border-gray-100">
-                <Link href="/">Home</Link>
+                <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+                  Home
+                </Link>
               </li>
               <li className="hover:text-black cursor-pointer p-2 border-b border-gray-100">
-                <Link href="/about">About</Link>
+                <Link href="/about" onClick={() => setMobileMenuOpen(false)}>
+                  About
+                </Link>
               </li>
               <li className="hover:text-black cursor-pointer p-2 border-b border-gray-100">
-                <Link href="/services">Services</Link>
+                <Link href="/services" onClick={() => setMobileMenuOpen(false)}>
+                  Services
+                </Link>
               </li>
               <li className="hover:text-black cursor-pointer p-2 border-b border-gray-100">
-                <Link href="/contact">Contact</Link>
+                <Link href="/contact" onClick={() => setMobileMenuOpen(false)}>
+                  Contact
+                </Link>
               </li>
             </ul>
 
@@ -252,6 +283,7 @@ const Navbar = () => {
                 <Link
                   href="/auth"
                   className="block w-full text-center bg-black text-white px-4 py-3 rounded-lg cursor-pointer hover:bg-gray-800 transition"
+                  onClick={() => setMobileMenuOpen(false)}
                 >
                   Sign In
                 </Link>

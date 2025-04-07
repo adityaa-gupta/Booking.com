@@ -1,6 +1,6 @@
 import React from 'react';
-import SideBar from '../_components/SideBar';
 import './layout.css'; // Import the CSS file for styling
+import SideBar from '@/app/_components/SideBar';
 
 const AdminLayout = ({ children }) => {
   return (
