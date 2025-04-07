@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
@@ -17,15 +17,13 @@ import ApiService from '../_lib/services/ApiService';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { jwtDecode } from 'jwt-decode';
 
-const AuthPage = () => {
-  const [isSignup, setIsSignup] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { login, isAuthenticated } = useAuthStore();
+// Separated component to handle redirect with useSearchParams
+const AuthRedirect = () => {
+  const { isAuthenticated } = useAuthStore();
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectUrl = searchParams.get('redirect');
 
-  // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       if (redirectUrl) {
@@ -35,6 +33,15 @@ const AuthPage = () => {
       }
     }
   }, [isAuthenticated, redirectUrl, router]);
+
+  return null;
+};
+
+const AuthPage = () => {
+  const [isSignup, setIsSignup] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const { login, isAuthenticated } = useAuthStore();
+  const router = useRouter();
 
   const {
     register,
@@ -61,10 +68,11 @@ const AuthPage = () => {
 
         if (role[0] === 'ROLE_ADMIN') {
           router.push('/admin/events');
-        } else if (redirectUrl) {
-          router.push(decodeURIComponent(redirectUrl));
         } else {
-          router.push('/');
+          // Redirect will be handled by AuthRedirect component
+          if (!isAuthenticated) {
+            router.push('/');
+          }
         }
       }
     } catch (error) {
@@ -77,6 +85,10 @@ const AuthPage = () => {
   return (
     <div className="flex items-center justify-center bg-[#E4EFE7]">
       <Toaster position="top-center" toastOptions={{ duration: 3000 }} />
+      {/* Wrap the component that uses useSearchParams in Suspense */}
+      <Suspense fallback={null}>
+        <AuthRedirect />
+      </Suspense>
       <div className="relative w-full  bg-[#FDFAF6] h-[100vh] shadow-lg rounded-lg overflow-hidden flex">
         {/* Animated Left Section */}
         <motion.div

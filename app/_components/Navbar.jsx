@@ -78,7 +78,7 @@ const Navbar = () => {
           href="/"
           className="font-bold text-2xl md:text-3xl text-[#498526] z-20"
         >
-          Booking.com
+          Seatly
         </Link>
 
         {/* Search Bar - Hidden on mobile, visible on larger screens */}
