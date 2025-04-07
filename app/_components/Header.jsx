@@ -1,11 +1,19 @@
 'use client';
 import Link from 'next/link';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-const HeaderCarousel = () => {
+// Fallback component for Suspense
+const HeaderFallback = () => (
+  <div className="w-full h-screen flex items-center justify-center bg-gray-900">
+    <div className="animate-pulse text-white text-2xl">Loading...</div>
+  </div>
+);
+
+// Component that uses useSearchParams
+const HeaderContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -46,52 +54,61 @@ const HeaderCarousel = () => {
   };
 
   return (
-    <header className="w-full h-screen relative">
-      <Carousel
-        showArrows={false}
-        autoPlay
-        infiniteLoop
-        interval={2000}
-        showThumbs={false}
-        showStatus={false}
-        stopOnHover
-        className="w-full h-full"
-      >
-        {slides.map((slide, index) => (
-          <div key={index} className="relative w-full h-screen">
-            {/* Background Image with Overlay */}
-            <div
-              className="absolute inset-0 bg-black bg-opacity-50"
-              style={{
-                backgroundImage: `url(${slide.image})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                filter: 'brightness(0.8)',
-              }}
-            />
+    <Carousel
+      showArrows={false}
+      autoPlay
+      infiniteLoop
+      interval={2000}
+      showThumbs={false}
+      showStatus={false}
+      stopOnHover
+      className="w-full h-full"
+    >
+      {slides.map((slide, index) => (
+        <div key={index} className="relative w-full h-screen">
+          {/* Background Image with Overlay */}
+          <div
+            className="absolute inset-0 bg-black bg-opacity-50"
+            style={{
+              backgroundImage: `url(${slide.image})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              filter: 'brightness(0.8)',
+            }}
+          />
 
-            {/* Content Section */}
-            <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-6 md:px-20">
-              <h1 className="text-4xl md:text-6xl font-bold drop-shadow-lg animate-fadeIn">
-                {slide.heading}
-              </h1>
-              <p className="text-lg md:text-xl mt-4 drop-shadow-md">
-                {slide.description}
-              </p>
-              <div
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  handleExplore(slide.link);
-                }}
-                className="mt-6 px-6 py-3 cursor-pointer text-lg font-semibold bg-[#99BC85] hover:bg-[#88A372] text-white rounded-full transition-all duration-300 shadow-lg"
-              >
-                Explore Now
-              </div>
+          {/* Content Section */}
+          <div className="absolute inset-0 flex flex-col justify-center items-center text-center text-white px-6 md:px-20">
+            <h1 className="text-4xl md:text-6xl font-bold drop-shadow-lg animate-fadeIn">
+              {slide.heading}
+            </h1>
+            <p className="text-lg md:text-xl mt-4 drop-shadow-md">
+              {slide.description}
+            </p>
+            <div
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleExplore(slide.link);
+              }}
+              className="mt-6 px-6 py-3 cursor-pointer text-lg font-semibold bg-[#99BC85] hover:bg-[#88A372] text-white rounded-full transition-all duration-300 shadow-lg"
+            >
+              Explore Now
             </div>
           </div>
-        ))}
-      </Carousel>
+        </div>
+      ))}
+    </Carousel>
+  );
+};
+
+// Main component with Suspense boundary
+const HeaderCarousel = () => {
+  return (
+    <header className="w-full h-screen relative">
+      <Suspense fallback={<HeaderFallback />}>
+        <HeaderContent />
+      </Suspense>
     </header>
   );
 };

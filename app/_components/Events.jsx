@@ -3,8 +3,10 @@ import React, { useEffect, useRef } from 'react';
 import useEventStore from '@/app/_store/useEventStore';
 import EventCard from './EventCard';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-const Events = () => {
+// Inner component that uses useSearchParams
+function EventsList() {
   const { events, fetchAllEvents, fetchEventsByType } = useEventStore();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -71,6 +73,19 @@ const Events = () => {
         )}
       </div>
     </div>
+  );
+}
+
+// Main component that wraps the EventsList with Suspense
+const Events = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="p-8 bg-[#FDFAF6] min-h-screen">Loading events...</div>
+      }
+    >
+      <EventsList />
+    </Suspense>
   );
 };
 
