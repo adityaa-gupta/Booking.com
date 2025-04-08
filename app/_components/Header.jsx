@@ -30,14 +30,14 @@ const HeaderContent = () => {
       image: '/images/concert.jpg',
       heading: 'Book Tickets for Concerts',
       description: 'Experience live music and thrilling performances.',
-      link: 'type=1',
+      link: 'type=3',
     },
     {
       name: 'Book Ticket Now',
       image: '/images/organization.jpg',
-      heading: 'Book Tickets for Events',
+      heading: 'Book Tickets for Organisational Events',
       description: 'Discover amazing events happening around you.',
-      link: 'type=3',
+      link: 'type=1',
     },
   ];
 

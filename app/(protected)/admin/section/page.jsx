@@ -70,9 +70,6 @@ const SectionPage = () => {
                   <th className="border border-[#99BC85] px-6 py-4">
                     Section Name
                   </th>
-                  <th className="border border-[#99BC85] px-6 py-4 text-center">
-                    Actions
-                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -94,14 +91,6 @@ const SectionPage = () => {
                       <span className="font-semibold text-[#255F38]">
                         {section.sectionName}
                       </span>
-                    </td>
-                    <td className="border border-[#99BC85] px-6 py-4 text-center">
-                      <button className=" text-[#1F7D53] px-4 py-2 rounded-full font-semibold ">
-                        <FaPencilRuler />
-                      </button>
-                      <button className=" text-[#d9534f] px-4 py-2 rounded-full font-semibold hover:bg-[#C9302C] ml-2">
-                        <FaTrash />
-                      </button>
                     </td>
                   </tr>
                 ))}

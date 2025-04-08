@@ -3,7 +3,6 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import useAuthStore from '../_store/useAuthStore';
-// import { useAuth } from '@/hooks/useAuth'; // Assume this hook exists or need to be created
 
 export default function ProtectedLayout({ children }) {
   const router = useRouter();
@@ -11,10 +10,10 @@ export default function ProtectedLayout({ children }) {
 
   useEffect(() => {
     // If authentication check is complete and no user is found
-    if (!isLoading && !user) {
-      router.push('/auth'); // Redirect to login page
+    if (!user) {
+      // router.push('/auth'); // Redirect to login page
     }
-  }, [user, isLoading, router]);
+  }, [user, router]);
 
   // Don't render anything while checking authentication
   if (isLoading) {
@@ -25,11 +24,11 @@ export default function ProtectedLayout({ children }) {
     );
   }
 
-  // Don't render children if not authenticated
-  if (!user) {
-    return null; // Will redirect in the useEffect
+  // If user is authenticated, render the children
+  if (user) {
+    return <>{children}</>;
   }
 
-  // User is authenticated, render the children
-  return <>{children}</>;
+  // If no user is found, return null (redirect will happen in useEffect)
+  return null;
 }

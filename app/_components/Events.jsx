@@ -17,7 +17,7 @@ function EventsList() {
   const eventTypeNames = {
     3: 'Concerts',
     2: 'Movies',
-    1: 'Events',
+    1: 'Organisational',
   };
 
   useEffect(() => {

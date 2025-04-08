@@ -88,9 +88,6 @@ const Page = () => {
                       Description
                     </th>
                     <th className="border border-[#99BC85] px-6 py-4">Image</th>
-                    <th className="border border-[#99BC85] px-6 py-4 text-center">
-                      Actions
-                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -124,14 +121,6 @@ const Page = () => {
                           alt={event.eventName}
                           className="w-16 h-16 object-cover rounded shadow-md"
                         />
-                      </td>
-                      <td className="border border-[#99BC85] px-6 py-4 text-center">
-                        <button className=" text-[#1F7D53] px-4 py-2 rounded-full font-semibold ">
-                          <FaPencilRuler />
-                        </button>
-                        <button className=" text-[#d9534f] px-4 py-2 rounded-full font-semibold hover:bg-[#C9302C] ml-2">
-                          <FaTrash />
-                        </button>
                       </td>
                     </tr>
                   ))}

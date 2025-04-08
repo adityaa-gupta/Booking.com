@@ -326,16 +326,6 @@ export default function MyBookingsPage() {
                   >
                     Past
                   </button>
-                  <button
-                    onClick={() => setBookingFilter('cancelled')}
-                    className={`px-4 py-2 rounded-full text-sm font-medium ${
-                      bookingFilter === 'cancelled'
-                        ? 'bg-[#498526] text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    Cancelled
-                  </button>
                 </div>
 
                 {filteredBookings.length === 0 ? (
@@ -534,27 +524,6 @@ export default function MyBookingsPage() {
                               </div>
 
                               <div className="flex gap-3 mt-3 md:mt-0">
-                                {(!booking.status ||
-                                  booking.status !== 'cancelled') &&
-                                  new Date(booking.startTime) > new Date() && (
-                                    <button
-                                      onClick={() =>
-                                        handleCancelBooking(booking.bookingId)
-                                      }
-                                      disabled={
-                                        cancellingId === booking.bookingId
-                                      }
-                                      className="px-4 py-2.5 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-lg hover:from-red-600 hover:to-red-700 disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 flex items-center gap-2"
-                                    >
-                                      <FaWindowClose />
-                                      <span>
-                                        {cancellingId === booking.bookingId
-                                          ? 'Cancelling...'
-                                          : 'Cancel'}
-                                      </span>
-                                    </button>
-                                  )}
-
                                 {new Date(booking.endTime) < new Date() &&
                                   booking.status !== 'cancelled' && (
                                     <button
