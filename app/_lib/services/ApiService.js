@@ -287,7 +287,6 @@ const ApiService = {
   // User profile methods
   getUserProfile: async ({ userId }) => {
     try {
-      console.log('Fetching profile for user ID:', userId);
       const response = await apiClient.get(
         ENDPOINTS.USER.GET.replace('{userId}', userId)
       );
@@ -300,7 +299,6 @@ const ApiService = {
 
   updateUserProfile: async (userData) => {
     try {
-      console.log('Updating profile with data:', userData);
       // Make sure the API request includes the profilePhoto URL
       const response = await apiClient.put(
         ENDPOINTS.USER.UPDATE.replace('{userId}', userData.userId),
@@ -323,7 +321,7 @@ const ApiService = {
   //create booking
 
   createBooking: async (bookingData) => {
-    console.log(bookingData);
+
     try {
       const response = await apiClient.post(
         ENDPOINTS.SEAT.BOOK_SEAT,
@@ -349,7 +347,7 @@ const ApiService = {
   },
 
   verifyPayment: async (razorpay_order_id, razorpay_payment_id) => {
-    console.log(razorpay_order_id, razorpay_payment_id);
+  
     try {
       const response = await apiClient.post(
         ENDPOINTS.SEAT.PAYMENT_VERIFY,

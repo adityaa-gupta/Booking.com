@@ -50,12 +50,14 @@ export default function MyProfilePage() {
       return;
     }
 
-    if (mounted && isAuthenticated && user) {
+    if (mounted && isAuthenticated ) {
       fetchUserProfile();
     }
-  }, [isAuthenticated, router, mounted, user]);
+  }, [isAuthenticated, router, mounted]);
 
   const fetchUserProfile = async () => {
+    if (!mounted) return;
+    if(user && user.profileId && profile) return;
     try {
       setIsLoading(true);
       if (!user || !user.userid) {
@@ -64,7 +66,7 @@ export default function MyProfilePage() {
       }
 
       const userData = await ApiService.getUserProfile({ userId: user.userid });
-      console.log('User profile data:', userData);
+  
 
       // Map the returned data to our profile state
       setProfile({
@@ -139,7 +141,6 @@ export default function MyProfilePage() {
       if (profile.profilePhoto) {
         updateProfilePhoto(profile.profilePhoto);
       }
-      console.log(profile);
 
       setMessage({ text: 'Profile updated successfully!', type: 'success' });
       setIsEditing(false);
