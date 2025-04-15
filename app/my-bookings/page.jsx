@@ -62,7 +62,7 @@ export default function MyBookingsPage() {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [submitLoading, setSubmitLoading] = useState(false);
 
-  console.log(user);
+  
   useEffect(() => {
     setMounted(true);
 

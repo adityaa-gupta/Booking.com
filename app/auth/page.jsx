@@ -87,7 +87,6 @@ const AuthPage = () => {
   const handleGoogleSignIn = async (response) => {
     try {
       const { credential } = response;
-      console.log('Google Response:', credential); // The Google Token
       const { token } = await ApiService.googleOAuth(credential);
       const userDetails = jwtDecode(token);
 

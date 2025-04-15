@@ -47,7 +47,7 @@ const ContactPage = () => {
               <h3 className="text-2xl font-bold text-[#255F38] mb-2">
                 Email Us
               </h3>
-              <p className="text-lg text-[#443627]">support@booking.com</p>
+              <p className="text-lg text-[#443627]">support@seatly.com</p>
             </motion.div>
             <motion.div
               className="flex flex-col items-center text-center bg-[#FAF1E6] p-8 rounded-lg shadow-md hover:shadow-xl transition duration-300"
@@ -57,7 +57,7 @@ const ContactPage = () => {
               <h3 className="text-2xl font-bold text-[#255F38] mb-2">
                 Call Us
               </h3>
-              <p className="text-lg text-[#443627]">+1 234 567 890</p>
+              <p className="text-lg text-[#443627]">+91 7877164642</p>
             </motion.div>
             <motion.div
               className="flex flex-col items-center text-center bg-[#FAF1E6] p-8 rounded-lg shadow-md hover:shadow-xl transition duration-300"
@@ -68,7 +68,7 @@ const ContactPage = () => {
                 Visit Us
               </h3>
               <p className="text-lg text-[#443627]">
-                123 Green Street, Event City, USA
+                123 Green Street, Gurgaon, India
               </p>
             </motion.div>
           </div>

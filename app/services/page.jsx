@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { FaCalendarAlt, FaMapMarkerAlt, FaChair } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 const ServicesPage = () => {
   return (
@@ -10,8 +11,15 @@ const ServicesPage = () => {
         className="relative h-[50vh] w-full bg-cover bg-center"
         style={{ backgroundImage: "url('/images/services-banner.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="absolute inset-0 bg-opacity-50 flex items-center justify-center">
+        <motion.h1
+            className="text-6xl font-extrabold text-white"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
           <h1 className="text-5xl font-bold text-white">Our Services</h1>
+        </motion.h1>
         </div>
       </div>
 

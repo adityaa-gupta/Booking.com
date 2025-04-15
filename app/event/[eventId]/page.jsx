@@ -268,7 +268,7 @@ const EventDetailsPage = () => {
 
       // Create booking
       const bookingResponse = await ApiService.createBooking(bookingData);
-      console.log('Booking created:', bookingResponse);
+     
 
       if (!bookingResponse) {
         toast.error('Failed to create booking. Please try again.');
@@ -285,7 +285,7 @@ const EventDetailsPage = () => {
       };
 
       const paymentResponse = await ApiService.makePayment(paymentData);
-      console.log('Payment order created:', paymentResponse);
+ 
 
       // Load Razorpay script if not already loaded
       const isLoaded = await loadRazorpayScript();
@@ -304,13 +304,12 @@ const EventDetailsPage = () => {
         description: `Booking for ${event.eventName}`,
         order_id: paymentResponse.razorpay_order_id,
         handler: async function (response) {
-          console.log('Payment successful:', response, paymentResponse);
 
           // Verify payment on your server
           try {
             const razorpay_order_id = paymentResponse.razorpay_order_id;
             const razorpay_payment_id = response.razorpay_payment_id;
-            console.log(response);
+       
             const verificationResponse = await ApiService.verifyPayment(
               razorpay_order_id,
               razorpay_payment_id
@@ -338,7 +337,6 @@ const EventDetailsPage = () => {
         },
         modal: {
           ondismiss: function () {
-            console.log('Payment cancelled');
             setPaymentProcessing(false);
           },
         },
