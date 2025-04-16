@@ -11,9 +11,9 @@ const SessionPage = () => {
 
   useEffect(() => {
     const fetchSessions = async () => {
-      if (selectedSectionId) {
+      if (selectedEventId) {
         try {
-          const data = await ApiService.fetchEventSessions(selectedSectionId);
+          const data = await ApiService.fetchEventSessions(selectedEventId);
           setSessions(data);
         } catch (error) {
           console.error('Error fetching sessions:', error.message);
@@ -22,7 +22,7 @@ const SessionPage = () => {
     };
 
     fetchSessions();
-  }, [selectedSectionId]);
+  }, [selectedEventId]);
 
   return (
     <div className="p-8 bg-[#FDFAF6] min-h-screen">
@@ -63,10 +63,10 @@ const SessionPage = () => {
                       index % 2 === 0 ? 'bg-[#E4EFE7]' : 'bg-[#FAF1E6]'
                     } hover:bg-[#DFF0E7] transition duration-200`}
                   >
-                    <td className="border border-[#99BC85] px-6 py-4">
+                    <td className="border border-[#99BC85] px-6 py-4 font-semibold text-[#255F38]">
                       {new Date(session.startTime).toLocaleString()}
                     </td>
-                    <td className="border border-[#99BC85] px-6 py-4">
+                    <td className="border border-[#99BC85] px-6 py-4 font-semibold text-[#255F38]">
                       {new Date(session.endTime).toLocaleString()}
                     </td>
                   </tr>
